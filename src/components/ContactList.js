@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const ContactList = ({ contacts, onDeleteContact }) => {
   return (
     <ul>

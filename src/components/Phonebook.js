@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
+
 export class PhoneBook extends Component {
   state = {
     contacts: [],
@@ -10,14 +11,17 @@ export class PhoneBook extends Component {
     name: '',
     number: '',
   };
+
   handleChangeName = event => {
     const value = event.target.value;
     this.setState({ name: value });
   };
+
   handleChangePhone = event => {
     const valueNumber = event.target.value;
     this.setState({ number: valueNumber });
   };
+
   handleChangeFilter = event => {
     this.setState({ filter: event.target.value });
   };
@@ -43,17 +47,20 @@ export class PhoneBook extends Component {
       number: '',
     }));
   };
+
   getFilteredContacts = () => {
     const normalizedFilter = this.state.filter.toLowerCase();
     return this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+
   handleDeleteContact = contactId => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
+
   render() {
     const filteredContacts = this.getFilteredContacts();
     return (
