@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export const ContactForm = ({
-  name,
-  number,
-  onNameChange,
-  onNumberChange,
-  onSubmit,
-}) => {
+export const ContactForm = ({ contacts, filter, setFilter, addContact }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    addContact(name, number);
+    setName('');
+    setNumber('');
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit}>
       <label>
         Name:
         <input
           type="text"
           name="name"
           value={name}
-          onChange={onNameChange}
+          onChange={e => setName(e.target.value)}
           required
         />
       </label>
@@ -25,7 +29,7 @@ export const ContactForm = ({
           type="tel"
           name="number"
           value={number}
-          onChange={onNumberChange}
+          onChange={e => setNumber(e.target.value)}
           required
         />
       </label>

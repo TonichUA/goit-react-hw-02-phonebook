@@ -1,12 +1,12 @@
 import React from 'react';
 
-export const Filter = ({ filter, onFilter }) => {
+export const Filter = ({ filter, setFilter }) => {
   return (
     <div>
       <input
         type="text"
         value={filter}
-        onChange={onFilter}
+        onChange={e => setFilter(e.target.value)}
         placeholder="Search contacts..."
       />
     </div>
