@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
 
-export const PhoneBook = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+export class PhoneBook extends Component {
+  constructor(props) {
+    super(props);
 
-  const addContact = (name, number) => {
+    this.state = {
+      contacts: [],
+      filter: '',
+    };
+  }
+
+  addContact = (name, number) => {
+    const { contacts } = this.state;
+
     if (
       contacts.some(
         contact => contact.name.toLowerCase() === name.toLowerCase()
@@ -17,21 +25,26 @@ export const PhoneBook = () => {
       alert(`${name} is already in contacts!`);
       return;
     }
+
     const newContact = {
       id: nanoid(),
       name,
       number,
     };
-    setContacts(prevContacts => [...prevContacts, newContact]);
+
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
   };
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
   };
 
-  const getFilteredContacts = () => {
+  getFilteredContacts = () => {
+    const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(
       contact =>
@@ -40,21 +53,28 @@ export const PhoneBook = () => {
     );
   };
 
-  return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm
-        contacts={contacts}
-        filter={filter}
-        setFilter={setFilter}
-        addContact={addContact}
-      />
-      <h2>Contacts</h2>
-      <Filter filter={filter} setFilter={setFilter} />
-      <ContactList
-        contacts={getFilteredContacts()}
-        deleteContact={deleteContact}
-      />
-    </div>
-  );
-};
+  render() {
+    const { contacts, filter } = this.state;
+
+    return (
+      <div>
+        <h1>Phonebook</h1>
+        <ContactForm
+          contacts={contacts}
+          filter={filter}
+          setFilter={newFilter => this.setState({ filter: newFilter })}
+          addContact={this.addContact}
+        />
+        <h2>Contacts</h2>
+        <Filter
+          filter={filter}
+          setFilter={newFilter => this.setState({ filter: newFilter })}
+        />
+        <ContactList
+          contacts={this.getFilteredContacts()}
+          deleteContact={this.deleteContact}
+        />
+      </div>
+    );
+  }
+}

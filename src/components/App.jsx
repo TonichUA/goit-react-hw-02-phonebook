@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { PhoneBook } from './Phonebook';
 
-export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+export class App extends Component {
+  constructor(props) {
+    super(props);
 
-  const addContact = (name, number) => {
+    this.state = {
+      contacts: [],
+      filter: '',
+    };
+  }
+
+  addContact = (name, number) => {
+    const { contacts } = this.state;
+
     if (
       contacts.some(
         contact => contact.name.toLowerCase() === name.toLowerCase()
@@ -15,42 +23,54 @@ export const App = () => {
       alert(`${name} is already in contacts!`);
       return;
     }
+
     const newContact = {
       id: nanoid(),
       name,
       number,
     };
-    setContacts(prevContacts => [...prevContacts, newContact]);
+
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
   };
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
+  };
+
+  handleFilterChange = newFilter => {
+    this.setState({ filter: newFilter });
+  };
+
+  render() {
+    const { contacts, filter } = this.state;
+
+    const filteredContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
     );
-  };
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
-
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      <PhoneBook
-        contacts={filteredContacts}
-        filter={filter}
-        setFilter={setFilter}
-        addContact={addContact}
-        deleteContact={deleteContact}
-      />
-    </div>
-  );
-};
+    return (
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: 40,
+          color: '#010101',
+        }}
+      >
+        <PhoneBook
+          contacts={filteredContacts}
+          filter={filter}
+          setFilter={this.handleFilterChange}
+          addContact={this.addContact}
+          deleteContact={this.deleteContact}
+        />
+      </div>
+    );
+  }
+}
