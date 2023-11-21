@@ -3,14 +3,10 @@ import { nanoid } from 'nanoid';
 import { PhoneBook } from './Phonebook';
 
 export class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      contacts: [],
-      filter: '',
-    };
-  }
+  state = {
+    contacts: [],
+    filter: '',
+  };
 
   addContact = (name, number) => {
     const { contacts } = this.state;
