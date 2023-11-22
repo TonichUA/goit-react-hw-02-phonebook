@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { PhoneBook } from './Phonebook';
 
+import { ContactForm } from './ContactForm';
+import { Filter } from './Filter';
+import { ContactList } from './ContactList';
 export class App extends Component {
   state = {
     contacts: [],
@@ -59,13 +61,24 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        <PhoneBook
-          contacts={filteredContacts}
-          filter={filter}
-          setFilter={this.handleFilterChange}
-          addContact={this.addContact}
-          deleteContact={this.deleteContact}
-        />
+        <div>
+          <h1>Phonebook</h1>
+          <ContactForm
+            contacts={contacts}
+            filter={filter}
+            setFilter={newFilter => this.setState({ filter: newFilter })}
+            addContact={this.addContact}
+          />
+          <h2>Contacts</h2>
+          <Filter
+            filter={filter}
+            setFilter={newFilter => this.setState({ filter: newFilter })}
+          />
+          <ContactList
+            contacts={filteredContacts}
+            deleteContact={this.deleteContact}
+          />
+        </div>
       </div>
     );
   }
