@@ -1,39 +1,56 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 
-export const ContactForm = ({ contacts, filter, setFilter, addContact }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export class ContactForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      number: '',
+    };
+  }
 
-  const handleSubmit = event => {
+  handleSubmit = event => {
     event.preventDefault();
-    addContact(name, number);
-    setName('');
-    setNumber('');
+    const { name, number } = this.state;
+    this.props.addContact(name, number);
+    this.setState({ name: '', number: '' });
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Phone:
-        <input
-          type="tel"
-          name="number"
-          value={number}
-          onChange={e => setNumber(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Add contact</button>
-    </form>
-  );
-};
+  handleNameChange = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  handleNumberChange = event => {
+    this.setState({ number: event.target.value });
+  };
+
+  render() {
+    const { name, number } = this.state;
+
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Ім'я:
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={this.handleNameChange}
+            required
+          />
+        </label>
+        <label>
+          Телефон:
+          <input
+            type="tel"
+            name="number"
+            value={number}
+            onChange={this.handleNumberChange}
+            required
+          />
+        </label>
+        <button type="submit">Додати контакт</button>
+      </form>
+    );
+  }
+}
