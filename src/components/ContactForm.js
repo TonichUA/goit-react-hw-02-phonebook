@@ -1,27 +1,21 @@
 import React, { Component } from 'react';
 
 export class ContactForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      number: '',
-    };
-  }
+  state = {
+    name: '',
+    number: '',
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
 
   handleSubmit = event => {
     event.preventDefault();
     const { name, number } = this.state;
     this.props.addContact(name, number);
     this.setState({ name: '', number: '' });
-  };
-
-  handleNameChange = event => {
-    this.setState({ name: event.target.value });
-  };
-
-  handleNumberChange = event => {
-    this.setState({ number: event.target.value });
   };
 
   render() {
@@ -35,7 +29,7 @@ export class ContactForm extends Component {
             type="text"
             name="name"
             value={name}
-            onChange={this.handleNameChange}
+            onChange={this.handleChange}
             required
           />
         </label>
@@ -45,7 +39,7 @@ export class ContactForm extends Component {
             type="tel"
             name="number"
             value={number}
-            onChange={this.handleNumberChange}
+            onChange={this.handleChange}
             required
           />
         </label>
